@@ -8,6 +8,13 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@protocol ServerUtilsDelegate <NSObject>
+
+- (void)serverUtilsDidFinished:(NSData *)data;
+- (void)serverUtilsDidFailed:(NSError *)error;
+
+@end
+
 @interface ServerUtils : NSObject<NSURLConnectionDataDelegate>
 
 @property (nonatomic, assign)id delegate;

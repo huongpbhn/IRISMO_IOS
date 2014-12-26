@@ -41,13 +41,4 @@ static NSCache *cache = nil;
     }
 }
 
-- (void)test {
-    
-    int(^mathBlock)(int, int) =  ^(int num1, int num2) {
-        return num1 + num2;
-    };
-    
-    int sum = mathBlock(1, 2);
-}
-
 @end

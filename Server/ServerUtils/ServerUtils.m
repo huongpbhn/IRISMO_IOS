@@ -172,6 +172,9 @@
     [self cancelTimer];
     [self cancelConnection];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    if ([delegate respondsToSelector:@selector(serverUtilsDidFailed:)]) {
+        [delegate serverUtilsDidFailed:error];
+    }
     
     [receivedData release];
     
@@ -186,10 +189,11 @@
     [self cancelTimer];
     [self cancelConnection];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-//    NSString *dataString = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
-//    NSLog(@"connection: %@", dataString);
-//    
-//    [dataString release];
+    
+    if ([delegate respondsToSelector:@selector(serverUtilsDidFinished:)]) {
+        [delegate serverUtilsDidFinished:receivedData];
+    }
+    
     [receivedData release];
 }
 
