@@ -22,7 +22,7 @@
 - (void)stopPlayingAudio;
 
 #pragma mark - toggle
-- (void)toggleRecordAudio:(NSString *)path;
-- (void)togglePlaybackAudio:(NSString *)path;
+- (BOOL)toggleRecordAudio:(NSString *)path;
+- (BOOL)togglePlaybackAudio:(NSString *)path;
 
 @end

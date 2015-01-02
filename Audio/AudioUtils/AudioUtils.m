@@ -76,9 +76,11 @@
                                     nil];
     
     NSURL *urlPath = [NSURL URLWithString:path];
-    soundRecorder = [[AVAudioRecorder alloc] initWithURL: urlPath
-                                                settings: recordSettings
-                                                   error: nil];
+    if (!soundRecorder) {
+        soundRecorder = [[AVAudioRecorder alloc] initWithURL: urlPath
+                                                    settings: recordSettings
+                                                       error: nil];
+    }
     
     [recordSettings release];
     
@@ -101,9 +103,11 @@
      setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     
     NSURL *urlPath = [NSURL URLWithString:path];
-    soundPlayer = [[AVAudioPlayer alloc]
-                   initWithContentsOfURL:urlPath
-                   error:nil];
+    if (!soundPlayer) {
+        soundPlayer = [[AVAudioPlayer alloc]
+                       initWithContentsOfURL:urlPath
+                       error:nil];
+    }
     soundPlayer.delegate = self;
     [soundPlayer prepareToPlay];
     [soundPlayer play];
@@ -113,7 +117,6 @@
 - (void)stopPlayingAudio {
     if (soundPlayer) {
         [soundPlayer stop];
-
         [soundPlayer release];
         soundPlayer = nil;
         [[AVAudioSession sharedInstance] setActive:NO error:nil];
@@ -121,7 +124,7 @@
 }
 
 #pragma mark - for toggle
-- (void)toggleRecordAudio:(NSString *)path {
+- (BOOL)toggleRecordAudio:(NSString *)path {
     if (recording) {
         recording = NO;
         [self stopRecordingAudio];
@@ -129,9 +132,10 @@
         recording = YES;
         [self startRecordingAudio:path];
     }
+    return recording;
     
 }
-- (void)togglePlaybackAudio:(NSString *)path {
+- (BOOL)togglePlaybackAudio:(NSString *)path {
     if (playing) {
         playing = NO;
         [self stopPlayingAudio];
@@ -139,6 +143,7 @@
         playing = YES;
         [self startPlayingAudio:path];
     }
+    return playing;
 }
 
 @end
