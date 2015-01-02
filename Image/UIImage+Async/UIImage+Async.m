@@ -1,6 +1,5 @@
 //
 //  UIImage+Async.m
-//  IRISLibrary
 //
 //  Created by Ricky Lee on 12/26/14.
 //  Copyright (c) 2014 Ricky Lee. All rights reserved.
