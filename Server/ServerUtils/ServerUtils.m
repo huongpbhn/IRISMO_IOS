@@ -37,7 +37,34 @@
     return jsonDict;
 }
 
+#pragma mark - Connection Timer
+- (void)cancelTimer {
+    if (timer.isValid) {
+        [timer invalidate];
+        timer = nil;
+    }
+}
+
+- (void)fireTimer {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    NSLog(@"HTTPClient Connection timeout!");
+    [self cancelConnection];
+}
+
+- (void)startTimer {
+    timer = [NSTimer scheduledTimerWithTimeInterval:TIME target:self selector:@selector(fireTimer) userInfo:nil repeats:NO];
+}
+
 #pragma mark - URL request using block
+
+/***************************************************************
+ *
+ *
+ * ServerUtils with Blocks
+ *
+ *
+ ***************************************************************/
+
 - (void)get:(NSString *)urlStr completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -92,7 +119,7 @@
     NSMutableData *body = [NSMutableData data];
     
     [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    NSString *dispositionStr = [[NSString alloc]initWithFormat:@"Content-Disposition: form-data; name=\"userfile\"; filename=\"dr.jpg\"\r\n"];
+    NSString *dispositionStr = [[NSString alloc]initWithFormat:@"Content-Disposition: form-data; name=\"userfile\"; filename=\"temp.jpg\"\r\n"];
     [body appendData:[dispositionStr dataUsingEncoding:NSUTF8StringEncoding]];
     [dispositionStr release];
     [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
@@ -140,45 +167,32 @@
 }
 
 - (void)connectWithRequest:(NSURLRequest *)request completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
+    [self startTimer];
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                               [self cancelTimer];
                                if ( !error )
                                {
                                    completionBlock(YES,data);
                                } else{
+                                   NSLog(@"ServerUtils Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
                                    completionBlock(NO,nil);
                                }
                            }];
 
 }
 
+#pragma mark - URL request using delegate
+
 /***************************************************************
+ *
  *
  * ServerUtils with Delegate
  *
  *
  ***************************************************************/
 
-#pragma mark - Connection Timer
-- (void)cancelTimer {
-    if (timer.isValid) {
-        [timer invalidate];
-        timer = nil;
-    }
-}
-
-- (void)fireTimer {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    NSLog(@"HTTPClient Connection timeout!");
-    [self cancelConnection];
-}
-
-- (void)startTimer {
-    timer = [NSTimer scheduledTimerWithTimeInterval:TIME target:self selector:@selector(fireTimer) userInfo:nil repeats:NO];
-}
-
-#pragma mark - Request
 - (void)get:(NSString *)urlStr {
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -271,7 +285,7 @@
     
 }
 
-#pragma mark - Create Server Connection
+#pragma mark Create Server Connection
 - (void)cancelConnection {
     if (connection) {
         [connection cancel];
@@ -293,7 +307,7 @@
 
 }
 
-#pragma mark - NSURLConnectionDelegate
+#pragma mark NSURLConnectionDelegate
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     [receivedData setLength:0];

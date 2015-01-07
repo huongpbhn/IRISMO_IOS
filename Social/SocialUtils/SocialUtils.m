@@ -34,7 +34,7 @@
 - (void)shareWithImage:(UIImage *)image withStyle:(NSString *)type {
         
     SLComposeViewController *controller = [SLComposeViewController composeViewControllerForServiceType:type];
-    [controller setInitialText:NSLocalizedString(@"SHARE_FROM_IRIS", nil)];
+    [controller setInitialText:NSLocalizedString(@"SOCIAL_SHARE", nil)];
     
     SLComposeViewControllerCompletionHandler myBlock = ^(SLComposeViewControllerResult result){
         if (result == SLComposeViewControllerResultCancelled) {
