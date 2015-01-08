@@ -6,6 +6,7 @@
 //
 
 #import "ServerUtils.h"
+#import "Reachability.h"
 
 #define TIME 25.0f
 #define REQUEST_TIME 30.0f
@@ -15,7 +16,13 @@
     NSMutableData *receivedData;
     
     NSTimer *timer;
+
+    Reachability *internetReachablility;
 }
+
+@property (nonatomic) Reachability *hostReachability;
+@property (nonatomic) Reachability *internetReachability;
+@property (nonatomic) Reachability *wifiReachability;
 
 @end
 
@@ -23,6 +30,56 @@
 
 @synthesize delegate;
 
+#pragma mark - Reachability
+- (BOOL)updateInterfaceWithReachability:(Reachability *)reachability
+{
+    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    BOOL reachable = NO;
+    switch (netStatus)
+    {
+        case NotReachable:        {
+            NSLog(@"Internet NotReachable");
+            reachable = NO;
+            break;
+        }
+        case ReachableViaWWAN:        {
+            NSLog(@"Internet ReachableViaWWAN");
+            reachable = YES;
+            break;
+        }
+        case ReachableViaWiFi:        {
+            NSLog(@"Internet ReachableViaWiFi");
+            reachable = YES;
+            break;
+        }
+    }
+
+    return reachable;
+}
+
+
+-(BOOL)internetIsAvailable {
+    NSLog(@"Check Internet Connection...");
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    [reachability startNotifier];
+    return [self updateInterfaceWithReachability:reachability];
+}
+
+-(BOOL)wifiIsAvailable {
+    NSLog(@"Check Wifi Connection...");
+    Reachability *reachability = [Reachability reachabilityForLocalWiFi];
+    [reachability startNotifier];
+    return [self updateInterfaceWithReachability:reachability];
+}
+
+-(BOOL)hostIsAvailable:(NSString *)host {
+    NSLog(@"Check Host Connection...");
+    Reachability *reachability = [Reachability reachabilityWithHostName:host];
+    [reachability startNotifier];
+    return [self updateInterfaceWithReachability:reachability];
+}
+
+#pragma mark - Data Convertion
 + (NSString *)dataToString:(NSData *)data {
     NSString *dataString = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     return dataString;
@@ -167,6 +224,12 @@
 }
 
 - (void)connectWithRequest:(NSURLRequest *)request completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
+    
+    if (![self internetAvailable:request.URL.absoluteString]) {
+        NSLog(@"no internet connection");
+        return;
+    }
+    
     [self startTimer];
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
@@ -295,6 +358,12 @@
 }
 
 - (void)connectWithRequest:(NSURLRequest *)request {
+    
+    if (![self internetAvailable:request.URL.absoluteString]) {
+        NSLog(@"no internet connection");
+        return;
+    }
+    
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     if (connection) {
         [self startTimer];

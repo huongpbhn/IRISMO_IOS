@@ -19,8 +19,16 @@
 
 @property (nonatomic, assign)id delegate;
 
-#pragma mark - Convert NSData to
+#pragma mark - Reachability
+-(BOOL)internetIsAvailable;
+
+-(BOOL)wifiIsAvailable;
+
+-(BOOL)hostIsAvailable:(NSString *)host;
+
+#pragma mark - Convert NSData to String/JSON
 + (NSString *)dataToString:(NSData *)data;
+
 + (NSDictionary *)dataToJSON:(NSData *)data;
 
 #pragma mark - ServerUtils using blocks
