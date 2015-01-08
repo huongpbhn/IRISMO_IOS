@@ -57,7 +57,6 @@
     return reachable;
 }
 
-
 -(BOOL)internetIsAvailable {
     NSLog(@"Check Internet Connection...");
     Reachability *reachability = [Reachability reachabilityForInternetConnection];
@@ -225,7 +224,7 @@
 
 - (void)connectWithRequest:(NSURLRequest *)request completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
     
-    if (![self internetAvailable:request.URL.absoluteString]) {
+    if (![self internetIsAvailable]) {
         NSLog(@"no internet connection");
         return;
     }
@@ -359,7 +358,7 @@
 
 - (void)connectWithRequest:(NSURLRequest *)request {
     
-    if (![self internetAvailable:request.URL.absoluteString]) {
+    if (![self internetIsAvailable]) {
         NSLog(@"no internet connection");
         return;
     }
