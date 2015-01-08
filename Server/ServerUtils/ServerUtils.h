@@ -8,8 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-// changes
-
 @protocol ServerUtilsDelegate <NSObject>
 
 - (void)serverUtilsDidFinished:(NSData *)data;
