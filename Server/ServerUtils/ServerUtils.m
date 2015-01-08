@@ -11,6 +11,8 @@
 #define TIME 25.0f
 #define REQUEST_TIME 30.0f
 
+// final
+
 @interface ServerUtils() {
     NSURLConnection *connection;
     NSMutableData *receivedData;
