@@ -16,7 +16,7 @@ static NSCache *cache = nil;
     if (!cache) {
         cache = [[NSCache alloc] init];
     }
-    
+//    NSLog(@"url: %@", url);
     UIImage *image = [cache objectForKey:url];
     
     if (image) {
@@ -28,12 +28,13 @@ static NSCache *cache = nil;
         [NSURLConnection sendAsynchronousRequest:request
                                            queue:[NSOperationQueue mainQueue]
                                completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                                   if ( !error )
+                                   UIImage *image = [UIImage imageWithData:data];
+                                   if ( !error && [image isKindOfClass:[UIImage class]])
                                    {
-                                       UIImage *image = [UIImage imageWithData:data];
                                        [cache setObject:image forKey:url];
                                        completionBlock(YES,image);
                                    } else{
+                                       NSLog(@"Error getting image: %@", url);
                                        completionBlock(NO,nil);
                                    }
                                }];
