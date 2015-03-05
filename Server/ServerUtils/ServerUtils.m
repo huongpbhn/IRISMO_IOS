@@ -92,7 +92,6 @@
     [NSJSONSerialization JSONObjectWithData: data
                                     options: NSJSONReadingMutableContainers
                                       error: &e];
-//    NSLog(@"data from server: %@", jsonDict);
     return jsonDict;
 }
 
