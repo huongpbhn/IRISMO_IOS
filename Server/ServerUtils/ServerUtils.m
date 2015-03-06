@@ -97,9 +97,11 @@
 
 #pragma mark - Connection Timer
 - (void)cancelTimer {
-    if (timer.isValid) {
-        [timer invalidate];
-        timer = nil;
+    if (timer) {
+        if (timer.isValid) {
+            [timer invalidate];
+            timer = nil;
+        }
     }
 }
 
@@ -235,7 +237,6 @@
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                               [self cancelTimer];
                                if ( !error )
                                {
                                    completionBlock(YES,data);
@@ -243,6 +244,7 @@
                                    NSLog(@"ServerUtils Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
                                    completionBlock(NO,nil);
                                }
+                               [self cancelTimer];
                            }];
 
 }
