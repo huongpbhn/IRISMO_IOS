@@ -8,8 +8,7 @@
 #import "ServerUtils.h"
 #import "Reachability.h"
 
-#define TIME 25.0f
-#define REQUEST_TIME 30.0f
+#define REQUEST_TIME 20.0f
 
 // final
 
@@ -87,17 +86,23 @@
 }
 
 + (NSDictionary *)dataToJSON:(NSData *)data {
-    NSError *e;
-    NSDictionary *jsonDict =
-    [NSJSONSerialization JSONObjectWithData: data
-                                    options: NSJSONReadingMutableContainers
-                                      error: &e];
-    return jsonDict;
+    if (data) {
+        NSError *e;
+        NSDictionary *jsonDict =
+        [NSJSONSerialization JSONObjectWithData: data
+                                        options: NSJSONReadingMutableContainers
+                                          error: &e];
+        return jsonDict;
+    }
+    else {
+        return nil;
+    }
+    
 }
 
 #pragma mark - Connection Timer
 - (void)cancelTimer {
-    if (timer) {
+    if (timer == nil) {
         if (timer.isValid) {
             [timer invalidate];
             timer = nil;
@@ -109,10 +114,11 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     NSLog(@"HTTPClient Connection timeout!");
     [self cancelConnection];
+    timer = nil;
 }
 
 - (void)startTimer {
-    timer = [NSTimer scheduledTimerWithTimeInterval:TIME target:self selector:@selector(fireTimer) userInfo:nil repeats:NO];
+    timer = [NSTimer scheduledTimerWithTimeInterval:REQUEST_TIME target:self selector:@selector(fireTimer) userInfo:nil repeats:NO];
 }
 
 #pragma mark - URL request using block
@@ -240,6 +246,7 @@
                                if ( !error )
                                {
                                    completionBlock(YES,data);
+                                   
                                } else{
                                    NSLog(@"ServerUtils Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
                                    completionBlock(NO,nil);
@@ -403,7 +410,7 @@
     [receivedData release];
     
     // inform the user
-    NSLog(@"ServerUtils Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+    NSLog(@"@delegate ServerUtils Connection failed! Error - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
 
 }
 

@@ -15,7 +15,8 @@
 
 @end
 
-@interface ServerUtils : NSObject<NSURLConnectionDataDelegate>
+@interface ServerUtils : NSObject<NSURLConnectionDataDelegate> {
+}
 
 @property (nonatomic, assign)id delegate;
 
