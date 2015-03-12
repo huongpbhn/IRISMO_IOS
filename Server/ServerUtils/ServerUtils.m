@@ -102,7 +102,7 @@
 
 #pragma mark - Connection Timer
 - (void)cancelTimer {
-    if (timer == nil) {
+    if (timer != nil) {
         if (timer.isValid) {
             [timer invalidate];
             timer = nil;
