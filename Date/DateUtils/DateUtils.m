@@ -24,7 +24,7 @@
     NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
     [DateFormatter setDateFormat:format];
     NSString* currentDateStr = [DateFormatter stringFromDate:[NSDate date]];
-    
+    [DateFormatter release];
     return [DateUtils convertToDate:currentDateStr withFormat:format];
     
 }
