@@ -236,6 +236,7 @@
     
     if (![self internetIsAvailable]) {
         NSLog(@"no internet connection");
+        completionBlock(NO,nil);
         return;
     }
     
