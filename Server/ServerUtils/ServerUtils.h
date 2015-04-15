@@ -35,7 +35,7 @@
 #pragma mark - ServerUtils using blocks
 - (void)get:(NSString *)urlStr completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock;
 
-- (void)post:(NSString *)urlStr withBody:(NSDictionary *)params completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock;
+- (void)post:(NSString *)urlStr withHeader:(NSDictionary *)headerParams withBody:(NSDictionary *)bodyParams completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock;
 
 - (void)uploadImage:(UIImage *)theImage withURL:(NSString *)theUrl completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock;
 
