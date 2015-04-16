@@ -46,7 +46,6 @@
             self.image = image;
         }
         else {
-            NSLog(@"There is no such image: %@", imageURL);
             self.backgroundColor = [UIColor lightGrayColor];
         }
         [self stopSpinner];

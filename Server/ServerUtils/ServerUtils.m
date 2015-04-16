@@ -92,6 +92,12 @@
         [NSJSONSerialization JSONObjectWithData: data
                                         options: NSJSONReadingMutableContainers
                                           error: &e];
+        
+        if (!jsonDict)
+        {
+            NSLog(@"JSON parsing error: %@",[e userInfo]);
+        }
+        
         return jsonDict;
     }
     else {
@@ -132,6 +138,7 @@
  ***************************************************************/
 
 - (void)get:(NSString *)urlStr completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
+    NSLog(@"<<----------- GET: %@", urlStr);
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:REQUEST_TIME];
@@ -142,6 +149,7 @@
 }
 
 - (void)post:(NSString *)urlStr withHeader:(NSDictionary *)headerParams withBody:(NSDictionary *)bodyParams completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
+    NSLog(@"<<----------- POST: %@, header:%@, body:%@", urlStr, headerParams, bodyParams);
     NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]
                                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                         timeoutInterval:REQUEST_TIME];
