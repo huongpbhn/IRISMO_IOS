@@ -139,7 +139,9 @@
 
 - (void)get:(NSString *)urlStr completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
     NSLog(@"<<----------- GET: %@", urlStr);
-    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]
+    NSString *escapedString = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"<<----------- GET: %@", escapedString);
+    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:escapedString]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:REQUEST_TIME];
     
@@ -150,7 +152,8 @@
 
 - (void)post:(NSString *)urlStr withHeader:(NSDictionary *)headerParams withBody:(NSDictionary *)bodyParams completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
     NSLog(@"<<----------- POST: %@, header:%@, body:%@", urlStr, headerParams, bodyParams);
-    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]
+    NSString *escapedString = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:escapedString]
                                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                         timeoutInterval:REQUEST_TIME];
     
@@ -173,6 +176,7 @@
 
     
     [theRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [theRequest setHTTPBody:[httpBody dataUsingEncoding:NSUTF8StringEncoding]];
     [httpBody release];
     
