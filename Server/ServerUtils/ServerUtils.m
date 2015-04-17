@@ -138,7 +138,7 @@
  ***************************************************************/
 
 - (void)get:(NSString *)urlStr completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
-    NSLog(@"<<----------- GET: %@", urlStr);
+//    NSLog(@"<<----------- GET: %@", urlStr);
     NSString *escapedString = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"<<----------- GET: %@", escapedString);
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:escapedString]
