@@ -10,6 +10,5 @@
 
 @interface NSString (Validation)
 
-- (BOOL)isValid;
-
++ (BOOL)validateString:(id)checkString;
 @end

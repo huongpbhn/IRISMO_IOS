@@ -10,15 +10,14 @@
 
 @implementation NSString (Validation)
 
-#warning issue with NULL
-- (BOOL)isValid {
-    if (![self isEqual:(id)[NSNull null]] && [self length] > 0) {
++ (BOOL)validateString:(id)checkString {
+    
+    if (![checkString isEqual:(id)[NSNull null]] && [checkString length] > 0) {
         return YES;
     }
     else {
         return NO;
     }
-    
 }
 
 @end
