@@ -10,13 +10,13 @@
 
 @implementation NSString (Validation)
 
-+ (BOOL)validateString:(id)checkString {
++ (NSString *)validateString:(id)checkString {
     
-    if (![checkString isEqual:(id)[NSNull null]] && [checkString length] > 0) {
-        return YES;
+    if ([checkString isKindOfClass:[NSString class]] && ![checkString isEqual:(id)[NSNull null]] && [checkString length] > 0) {
+        return checkString;
     }
     else {
-        return NO;
+        return nil;
     }
 }
 

@@ -10,5 +10,6 @@
 
 @interface NSString (Validation)
 
-+ (BOOL)validateString:(id)checkString;
++ (NSString *)validateString:(id)checkString;
+
 @end
