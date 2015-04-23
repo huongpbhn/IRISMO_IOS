@@ -32,6 +32,7 @@
         // Could not evaluate policy; look at authError and present an appropriate message to user
         completionHandler(NO);
     }
+    [myContext release];
 }
 
 @end

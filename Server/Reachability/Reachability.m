@@ -109,7 +109,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 	SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(NULL, [hostName UTF8String]);
 	if (reachability != NULL)
 	{
-		returnValue= [[self alloc] init];
+		returnValue= [[[self alloc] init] autorelease];
 		if (returnValue != NULL)
 		{
 			returnValue->_reachabilityRef = reachability;
@@ -128,7 +128,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 
 	if (reachability != NULL)
 	{
-		returnValue = [[self alloc] init];
+		returnValue = [[[self alloc] init] autorelease];
 		if (returnValue != NULL)
 		{
 			returnValue->_reachabilityRef = reachability;

@@ -20,7 +20,6 @@
     if (!spinner) {
         spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     }
-    NSLog(@"imageview width: %f, height: %f", self.frame.size.width, self.frame.size.height);
     spinner.center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
     spinner.hidesWhenStopped = YES;
     [self addSubview:spinner];
@@ -39,8 +38,12 @@
 }
 */
 
-- (void)downloadImageWithURL:(NSString *)imageURL {
+- (void)awakeFromNib {
     [self startSpinner];
+}
+
+- (void)downloadImageWithURL:(NSString *)imageURL {
+//    [self startSpinner];
     self.image = nil;
     [UIImage downloadImageWithURL:imageURL completionHandler:^(BOOL succeeded, UIImage *image) {
         if (succeeded) {
