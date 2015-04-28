@@ -22,6 +22,8 @@
 
 @property(assign)id delegate;
 
--(void)startSharing:(id)vc withSubject:(NSString *)subject withDetails:(NSArray *)array;
+-(void)startSharing:(UIViewController *)vc withSubject:(NSString *)subject withDetails:(NSArray *)array withExcludeActivities:(NSArray *) excludeActivities;
+
+-(void)startSharing:(UIViewController *)vc withSubject:(NSString *)subject withDetails:(NSArray *)array;
 
 @end

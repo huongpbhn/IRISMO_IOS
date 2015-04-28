@@ -13,19 +13,12 @@
 
 @synthesize delegate;
 
--(void)startSharing:(id)vc withSubject:(NSString *)subject withDetails:(NSArray *)array {
+-(void)startSharing:(UIViewController *)vc withSubject:(NSString *)subject withDetails:(NSArray *)array withExcludeActivities:(NSArray *) excludeActivities {
+    self.delegate = vc;
     UIActivityViewController *avc = [[UIActivityViewController alloc] initWithActivityItems:array applicationActivities:nil];
     [avc setValue:subject forKey:@"subject"];
-                NSArray *excludeActivities = @[UIActivityTypeAirDrop,
-                                               UIActivityTypeCopyToPasteboard,
-                                               UIActivityTypePrint,
-                                               UIActivityTypeAssignToContact,
-                                               UIActivityTypeSaveToCameraRoll,
-                                               UIActivityTypeAddToReadingList,
-                                               UIActivityTypePostToFlickr,
-                                               UIActivityTypePostToVimeo];
     
-                avc.excludedActivityTypes = excludeActivities;
+    avc.excludedActivityTypes = excludeActivities;
     
     [avc setCompletionHandler:^(NSString *act, BOOL done)
      {
@@ -48,7 +41,22 @@
     
     [vc presentViewController:avc animated:YES completion:nil];
     [avc release];
+
 }
 
+-(void)startSharing:(UIViewController *)vc withSubject:(NSString *)subject withDetails:(NSArray *)array {
+    UIActivityViewController *avc = [[UIActivityViewController alloc] initWithActivityItems:array applicationActivities:nil];
+    [avc setValue:subject forKey:@"subject"];
+    NSArray *excludeActivities = @[UIActivityTypeAirDrop,
+                                   UIActivityTypeCopyToPasteboard,
+                                   UIActivityTypePrint,
+                                   UIActivityTypeAssignToContact,
+                                   UIActivityTypeSaveToCameraRoll,
+                                   UIActivityTypeAddToReadingList,
+                                   UIActivityTypePostToFlickr,
+                                   UIActivityTypePostToVimeo];
+    
+    [self startSharing:vc withSubject:subject withDetails:array withExcludeActivities:excludeActivities];
+}
 
 @end
