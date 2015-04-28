@@ -36,12 +36,6 @@
              if ([delegate respondsToSelector:@selector(finishSocialSharing:)]) {
                  [delegate finishSocialSharing:act];
              }
-             else {
-                 if ([delegate respondsToSelector:@selector(failSocialSharing:)]) {
-                     [delegate failSocialSharing:act];
-                 }
-             }
-             
          }
          else {
              NSLog(@"Fail social sharing");
