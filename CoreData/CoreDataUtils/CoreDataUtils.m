@@ -37,7 +37,7 @@
     }
     NSError *error = nil;
     if (![context save:&error]) {
-        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        NSLog(@"ERROR: couldn't save: %@", [error localizedDescription]);
     }
 }
 
@@ -48,18 +48,25 @@
         return nil;
     }
     
-    NSLog(@"fetching....................");
-    NSError *error;
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:entityName inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
+    @try {
+        NSLog(@"fetching Core Data....................");
+        NSError *error;
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription
+                                       entityForName:entityName inManagedObjectContext:context];
+        [fetchRequest setEntity:entity];
+        
+        NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+        [fetchedObjectsDict setObject:fetchedObjects forKey:entityName];
+        [fetchRequest release];
+        
+        return fetchedObjects;
+    }
+    @catch (NSException * e) {
+        NSLog(@"Core Data Exception: %@", [e description]);
+    }
     
-    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
-    [fetchedObjectsDict setObject:fetchedObjects forKey:entityName];
-    [fetchRequest release];
-    
-    return fetchedObjects;
+    return nil;
     
 }
 
@@ -77,7 +84,8 @@
     }
     
     [self save];
-    NSLog(@"flush complete!");
+    NSLog(@"flush Core Data complete!");
+    
 }
 
 #pragma mark - Filter using Predicate
@@ -87,6 +95,10 @@
 //
 // Predicate Format String Syntax
 // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Predicates/Articles/pSyntax.html#//apple_ref/doc/uid/TP40001795-CJBDBHCB
+//
+// Quick sample
+// NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(name LIKE %@) AND (city LIKE %@)", @"Test Bank*", @"Testville2"];
+// NSArray *array = [coreData filterCoreData:@"FailedBankInfo" withPredicate:predicate];
 //
 
 - (NSArray *)filterCoreData:(NSString *)entityName withPredicate:(NSPredicate *)predicate {
@@ -101,7 +113,7 @@
         fetchedObjects = [self fetchCoreData:entityName];
     }
     
-    NSArray *filtered  = [fetchedObjects filteredArrayUsingPredicate:predicate];
+    NSArray *filtered = [fetchedObjects filteredArrayUsingPredicate:predicate];
     return filtered;
 }
 
