@@ -92,6 +92,12 @@
         [NSJSONSerialization JSONObjectWithData: data
                                         options: NSJSONReadingMutableContainers
                                           error: &e];
+        
+        if (!jsonDict)
+        {
+            NSLog(@"JSON parsing error: %@",[e userInfo]);
+        }
+        
         return jsonDict;
     }
     else {
@@ -132,7 +138,10 @@
  ***************************************************************/
 
 - (void)get:(NSString *)urlStr completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
-    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]
+//    NSLog(@"<<----------- GET: %@", urlStr);
+    NSString *escapedString = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"<<----------- GET: %@", escapedString);
+    NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:escapedString]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:REQUEST_TIME];
     
@@ -141,24 +150,33 @@
     }];
 }
 
-- (void)post:(NSString *)urlStr withBody:(NSDictionary *)params completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
-    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]
+- (void)post:(NSString *)urlStr withHeader:(NSDictionary *)headerParams withBody:(NSDictionary *)bodyParams completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
+    NSLog(@"<<----------- POST: %@, header:%@, body:%@", urlStr, headerParams, bodyParams);
+    NSString *escapedString = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:escapedString]
                                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                         timeoutInterval:REQUEST_TIME];
     
     [theRequest setHTTPMethod:@"POST"];
     NSMutableString *httpBody = [[NSMutableString alloc] init];
-    int count = (int)[[params allKeys] count];
+    int count = (int)[[bodyParams allKeys] count];
     for(int i = 0; i < count; i++) {
-        NSString *key = [[params allKeys] objectAtIndex:i];
+        NSString *key = [[bodyParams allKeys] objectAtIndex:i];
         if (i >= count-1) {
-            [httpBody appendFormat:@"%@=%@", key, [params objectForKey:key]];
+            [httpBody appendFormat:@"%@=%@", key, [bodyParams objectForKey:key]];
         }
         else {
-            [httpBody appendFormat:@"%@=%@&", key, [params objectForKey:key]];
+            [httpBody appendFormat:@"%@=%@&", key, [bodyParams objectForKey:key]];
         }
     }
     
+    for (int i = 0; i < [[headerParams allKeys] count]; i++) {
+        [theRequest setValue:[headerParams objectForKey:[[headerParams allKeys] objectAtIndex:i]] forHTTPHeaderField:[[headerParams allKeys] objectAtIndex:i]];
+    }
+
+    
+    [theRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [theRequest setHTTPBody:[httpBody dataUsingEncoding:NSUTF8StringEncoding]];
     [httpBody release];
     
@@ -236,6 +254,7 @@
     
     if (![self internetIsAvailable]) {
         NSLog(@"no internet connection");
+        completionBlock(NO,nil);
         return;
     }
     
