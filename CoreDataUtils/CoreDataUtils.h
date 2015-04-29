@@ -11,11 +11,14 @@
 
 @interface CoreDataUtils : NSObject
 
+@property (nonatomic, retain) NSMutableDictionary *fetchedObjectsDict;
 @property (nonatomic, retain) NSManagedObjectContext *context;
 
 + (id)sharedInstance;
 
-- (NSArray *)fetchCoreData:(NSString *)name;
-- (void)flushCoreData:(NSString *)name;
+- (void)save;
+- (NSArray *)fetchCoreData:(NSString *)entityName;
+- (void)flushCoreData:(NSString *)entityName;
+- (NSArray *)filterCoreData:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation CoreDataUtils
 
-@synthesize context;
+@synthesize context, fetchedObjectsDict;
 
 + (id)sharedInstance {
     static CoreDataUtils *sharedInstance = nil;
@@ -23,42 +23,86 @@
 
 - (id)init {
     if (self = [super init]) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        self.fetchedObjectsDict = dict;
+        [dict release];
     }
     return self;
 }
 
+- (void)save {
+    if (!context) {
+        NSLog(@"ERROR: there is no context!!");
+        return;
+    }
+    NSError *error = nil;
+    if (![context save:&error]) {
+        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+    }
+}
 
-- (NSArray *)fetchCoreData:(NSString *)name {
+#pragma mark - Fetch all Core Data
+- (NSArray *)fetchCoreData:(NSString *)entityName {
     if (!context) {
         NSLog(@"ERROR: there is no context!!");
         return nil;
     }
+    
+    NSLog(@"fetching....................");
     NSError *error;
-    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:name inManagedObjectContext:context];
+                                   entityForName:entityName inManagedObjectContext:context];
     [fetchRequest setEntity:entity];
     
-    return [context executeFetchRequest:fetchRequest error:&error];
+    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+    [fetchedObjectsDict setObject:fetchedObjects forKey:entityName];
+    [fetchRequest release];
+    
+    return fetchedObjects;
     
 }
 
-- (void)flushCoreData:(NSString *)name {
+#pragma mark - Flush all Core Data
+- (void)flushCoreData:(NSString *)entityName {
     if (!context) {
         NSLog(@"ERROR: there is no context!!");
         return;
     }
     
-    NSArray *flushObjects = [self fetchCoreData:name];
+    NSArray *flushObjects = [self fetchCoreData:entityName];
     
     for (NSManagedObject * aManagedObject in flushObjects) {
         [context deleteObject:aManagedObject];
     }
     
-    NSError *saveError = nil;
-    [context save:&saveError];
+    [self save];
+    NSLog(@"flush complete!");
 }
 
+#pragma mark - Filter using Predicate
+//
+// How to create Predicate tutorial
+// https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Predicates/Articles/pCreating.html
+//
+// Predicate Format String Syntax
+// https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Predicates/Articles/pSyntax.html#//apple_ref/doc/uid/TP40001795-CJBDBHCB
+//
 
+- (NSArray *)filterCoreData:(NSString *)entityName withPredicate:(NSPredicate *)predicate {
+    
+    if (!context) {
+        NSLog(@"ERROR: there is no context!!");
+        return nil;
+    }
+    
+    NSArray *fetchedObjects = [fetchedObjectsDict objectForKey:entityName];
+    if (!fetchedObjects) {
+        fetchedObjects = [self fetchCoreData:entityName];
+    }
+    
+    NSArray *filtered  = [fetchedObjects filteredArrayUsingPredicate:predicate];
+    return filtered;
+}
 
 @end
