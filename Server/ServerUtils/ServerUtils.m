@@ -150,6 +150,28 @@
     }];
 }
 
+- (void)get:(NSString *)urlStr withHeader:(NSDictionary *)headerParams completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
+    //    NSLog(@"<<----------- GET: %@", urlStr);
+    NSString *escapedString = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"<<----------- GET: %@", escapedString);
+    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:escapedString]
+                                              cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                          timeoutInterval:REQUEST_TIME];
+    
+    [theRequest setHTTPMethod:@"GET"];
+    
+    for (int i = 0; i < [[headerParams allKeys] count]; i++) {
+        [theRequest setValue:[headerParams objectForKey:[[headerParams allKeys] objectAtIndex:i]] forHTTPHeaderField:[[headerParams allKeys] objectAtIndex:i]];
+    }
+    
+    [theRequest setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [theRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [self connectWithRequest:theRequest completionHandler:^(BOOL successed, NSData *data) {
+        completionBlock(successed, data);
+    }];
+}
+
 - (void)post:(NSString *)urlStr withHeader:(NSDictionary *)headerParams withBody:(NSDictionary *)bodyParams completionHandler:(void(^)(BOOL successed, NSData *data))completionBlock {
     NSLog(@"<<----------- POST: %@, header:%@, body:%@", urlStr, headerParams, bodyParams);
     NSString *escapedString = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
