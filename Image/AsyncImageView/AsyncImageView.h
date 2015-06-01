@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LibraryAPI.h"
+#import "UIImage+Async.h"
 
 @interface AsyncImageView : UIImageView
 

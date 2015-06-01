@@ -55,7 +55,7 @@
                                    UIActivityTypeAddToReadingList,
                                    UIActivityTypePostToFlickr,
                                    UIActivityTypePostToVimeo];
-    
+    [avc release];
     [self startSharing:vc withSubject:subject withDetails:array withExcludeActivities:excludeActivities];
 }
 
