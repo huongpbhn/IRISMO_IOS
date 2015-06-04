@@ -16,11 +16,13 @@
 
 @implementation AsyncImageView
 
+@synthesize imageViewSize;
+
 - (void)startSpinner {
     if (!spinner) {
         spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     }
-    spinner.center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    spinner.center = CGPointMake(imageViewSize.width/2, imageViewSize.height/2);
     spinner.hidesWhenStopped = YES;
     [self addSubview:spinner];
     [spinner startAnimating];
@@ -49,9 +51,9 @@
         if (succeeded) {
             self.image = image;
         }
-        else {
-            self.backgroundColor = [UIColor lightGrayColor];
-        }
+//        else {
+//            self.backgroundColor = [UIColor lightGrayColor];
+//        }
         [self stopSpinner];
     }];
 }

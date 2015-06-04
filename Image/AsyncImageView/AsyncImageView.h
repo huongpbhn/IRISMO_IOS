@@ -11,6 +11,8 @@
 
 @interface AsyncImageView : UIImageView
 
+@property (assign)CGSize imageViewSize;
+
 - (void)downloadImageWithURL:(NSString *)imageURL;
 
 @end
