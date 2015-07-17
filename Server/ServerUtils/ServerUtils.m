@@ -96,6 +96,7 @@
         if (!jsonDict)
         {
             NSLog(@"JSON parsing error: %@",[e userInfo]);
+            return nil;            
         }
         
         return jsonDict;
