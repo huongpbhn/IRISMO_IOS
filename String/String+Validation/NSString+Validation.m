@@ -16,7 +16,7 @@
         return checkString;
     }
     else {
-        return nil;
+        return @"";
     }
 }
 

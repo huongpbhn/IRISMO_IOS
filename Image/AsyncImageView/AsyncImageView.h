@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LibraryAPI.h"
+#import "UIImage+Async.h"
 
 @interface AsyncImageView : UIImageView
+
+@property (assign)CGSize imageViewSize;
 
 - (void)downloadImageWithURL:(NSString *)imageURL;
 
