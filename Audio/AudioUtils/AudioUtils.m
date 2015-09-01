@@ -60,6 +60,14 @@
     [super dealloc];
 }
 
+// record audio
+- (void)startRecordingAudio {
+    NSString *tempDir = NSTemporaryDirectory();
+    NSString *soundFilePath = [tempDir stringByAppendingString: RECORD_FILE_NAME];          // record audio
+    
+    [self startRecordingAudio:soundFilePath];
+}
+
 - (void)startRecordingAudio:(NSString *)path {
     [[AVAudioSession sharedInstance]
      setCategory:AVAudioSessionCategoryPlayAndRecord
@@ -96,6 +104,14 @@
         soundRecorder = nil;
         [[AVAudioSession sharedInstance] setActive:NO error:nil];
     }
+}
+
+// playing audio
+- (void)startPlayback {
+    NSString *tempDir = NSTemporaryDirectory();
+    NSString *soundFilePath = [tempDir stringByAppendingString: RECORD_FILE_NAME];          // record audio
+    
+    [self startPlayingAudio:soundFilePath];
 }
 
 - (void)startPlayingAudio:(NSString *)path {

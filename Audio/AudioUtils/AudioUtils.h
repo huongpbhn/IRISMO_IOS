@@ -16,8 +16,11 @@
 
 @property (nonatomic, retain) NSURL *defaultFileURL;
 
+- (void)startRecordingAudio;
 - (void)startRecordingAudio:(NSString *)path;
 - (void)stopRecordingAudio;
+
+- (void)startPlayback;
 - (void)startPlayingAudio:(NSString *)path;
 - (void)stopPlayingAudio;
 
