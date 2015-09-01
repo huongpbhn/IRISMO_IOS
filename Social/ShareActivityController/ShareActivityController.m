@@ -21,7 +21,7 @@
     
     avc.excludedActivityTypes = excludeActivities;
 
-    if (SYSTEM_VERSION_GREATER_THAN(@"8.0")) {
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
         [avc setCompletionWithItemsHandler:^(NSString *act, BOOL done, NSArray *returnedItems, NSError *e)
          {
              NSLog(@"social sharing action type %@",act);
