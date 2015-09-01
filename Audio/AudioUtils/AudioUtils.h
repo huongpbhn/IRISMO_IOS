@@ -11,10 +11,8 @@
 #import <AVFoundation/AVFoundation.h>
 
 @interface AudioUtils : NSObject <AVAudioPlayerDelegate, AVAudioRecorderDelegate, AVAudioSessionDelegate> {
-    NSURL *soundFileURL;
 }
 
-@property (nonatomic, retain) NSURL *defaultFileURL;
 
 - (void)startRecordingAudio;
 - (void)startRecordingAudio:(NSString *)path;
@@ -25,6 +23,9 @@
 - (void)stopPlayingAudio;
 
 #pragma mark - toggle
+- (BOOL)toggleRecordAudio;
+- (BOOL)togglePlaybackAudio;
+
 - (BOOL)toggleRecordAudio:(NSString *)path;
 - (BOOL)togglePlaybackAudio:(NSString *)path;
 
