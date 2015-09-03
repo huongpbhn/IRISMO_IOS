@@ -24,8 +24,8 @@
 
 @property (nonatomic, assign)id delegate;
 
-- (void)createVideoAtView:(UIView *)view;
-- (void)newVideo:(NSString *)urlStr;
+- (void)createVideoAtView:(UIView *)view shouldAutoPlay:(BOOL)autoPlay;
+- (void)newVideo:(NSString *)urlStr shouldAutoPlay:(BOOL)autoPlay;
 
 // present full screen
 - (void)presentVideo:(UIViewController *)viewController;
