@@ -16,23 +16,19 @@
     
     AVAudioRecorder *soundRecorder;
     AVAudioPlayer *soundPlayer;
+    
+    NSString *tempSoundFilePath;
 }
 
 @end
 
 @implementation AudioUtils
 
-@synthesize defaultFileURL;
-
 - (id)init {
     self = [super init];
     if (self) {
         NSString *tempDir = NSTemporaryDirectory();
-        NSString *soundFilePath = [tempDir stringByAppendingString: RECORD_FILE_NAME];          // record audio
-        
-        NSURL *temp = [[NSURL alloc] initFileURLWithPath:soundFilePath];
-        self.defaultFileURL = temp;
-        [temp release];
+        tempSoundFilePath = [tempDir stringByAppendingString: RECORD_FILE_NAME];          // record audio
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
 //        audioSession.delegate = self;
@@ -47,8 +43,6 @@
 }
 
 - (void)dealloc {
-    self.defaultFileURL = nil;
-    
     if (soundRecorder) {
         [soundRecorder release];
         soundRecorder = nil;
@@ -58,6 +52,11 @@
         soundPlayer = nil;
     }
     [super dealloc];
+}
+
+// record audio
+- (void)startRecordingAudio {
+    [self startRecordingAudio:tempSoundFilePath];
 }
 
 - (void)startRecordingAudio:(NSString *)path {
@@ -98,6 +97,11 @@
     }
 }
 
+// playing audio
+- (void)startPlayback {
+    [self startPlayingAudio:tempSoundFilePath];
+}
+
 - (void)startPlayingAudio:(NSString *)path {
     [[AVAudioSession sharedInstance]
      setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
@@ -124,6 +128,14 @@
 }
 
 #pragma mark - for toggle
+- (BOOL)toggleRecordAudio {
+    return [self toggleRecordAudio:tempSoundFilePath];
+}
+
+- (BOOL)togglePlaybackAudio {
+    return [self togglePlaybackAudio:tempSoundFilePath];
+}
+
 - (BOOL)toggleRecordAudio:(NSString *)path {
     if (recording) {
         recording = NO;

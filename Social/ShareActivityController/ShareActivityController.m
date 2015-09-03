@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ShareActivityController.h"
+#import "CheckSystem.h"
 
 @implementation ShareActivityController
 
@@ -19,26 +20,46 @@
     [avc setValue:subject forKey:@"subject"];
     
     avc.excludedActivityTypes = excludeActivities;
-    
-    [avc setCompletionHandler:^(NSString *act, BOOL done)
-     {
-         
-         NSLog(@"social sharing action type %@",act);
-         
-         if ( done ) {
-             if ([delegate respondsToSelector:@selector(finishSocialSharing:)]) {
-                 [delegate finishSocialSharing:act];
+
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+        [avc setCompletionWithItemsHandler:^(NSString *act, BOOL done, NSArray *returnedItems, NSError *e)
+         {
+             NSLog(@"social sharing action type %@",act);
+             
+             if ( done ) {
+                 if ([delegate respondsToSelector:@selector(finishSocialSharing:)]) {
+                     [delegate finishSocialSharing:act];
+                 }
              }
-         }
-         else {
-             NSLog(@"Fail social sharing");
-             // didn't succeed.
-             if ([delegate respondsToSelector:@selector(failSocialSharing:)]) {
-                 [delegate failSocialSharing:act];
+             else {
+                 NSLog(@"Fail social sharing");
+                 // didn't succeed.
+                 if ([delegate respondsToSelector:@selector(failSocialSharing:)]) {
+                     [delegate failSocialSharing:act];
+                 }
              }
-         }
-     }];
-    
+         }];
+    }
+    else {
+        [avc setCompletionHandler:^(NSString *act, BOOL done)
+         {
+             
+             NSLog(@"social sharing action type %@",act);
+             
+             if ( done ) {
+                 if ([delegate respondsToSelector:@selector(finishSocialSharing:)]) {
+                     [delegate finishSocialSharing:act];
+                 }
+             }
+             else {
+                 NSLog(@"Fail social sharing");
+                 // didn't succeed.
+                 if ([delegate respondsToSelector:@selector(failSocialSharing:)]) {
+                     [delegate failSocialSharing:act];
+                 }
+             }
+         }];
+    }
     [vc presentViewController:avc animated:YES completion:nil];
     [avc release];
 
