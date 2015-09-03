@@ -15,6 +15,7 @@
 
 @implementation VideoUtils
 
+@synthesize delegate;
 @synthesize videoURLString;
 @synthesize moviePlayer;
 
@@ -28,6 +29,12 @@
 }
 
 - (void)dealloc {
+    if (moviePlayer) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:MPMoviePlayerPlaybackDidFinishNotification
+                                                      object:moviePlayer];
+    }
+    
     videoURLString = nil;
     moviePlayer = nil;
     [super dealloc];
@@ -41,6 +48,10 @@
     moviePlayer.shouldAutoplay = NO;    
     [moviePlayer prepareToPlay];
 //    [moviePlayer setScalingMode:MPMovieScalingModeFill];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(videoDidFinish:)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:moviePlayer];
     [view addSubview:moviePlayer.view];
 }
 
@@ -59,6 +70,14 @@
     
     [viewController presentMoviePlayerViewControllerAnimated:movieViewPlayer];
     [movieViewPlayer release];
+}
+
+- (void) videoDidFinish:(NSNotification*)notification {
+
+    NSLog(@"finished playing video");
+    if ([delegate respondsToSelector:@selector(videoDidFinish)]) {
+        [delegate videoDidFinish];
+    }
 }
 
 @end

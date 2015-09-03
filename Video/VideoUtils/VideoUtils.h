@@ -9,11 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 
+@protocol VideoUtilsDelegate <NSObject>
+
+@optional
+- (void)videoDidFinish;
+
+@end
+
 @interface VideoUtils : NSObject
 
 @property (nonatomic, retain) MPMoviePlayerController *moviePlayer;
 
 @property (nonatomic, retain) NSString *videoURLString;
+
+@property (nonatomic, assign)id delegate;
 
 - (void)createVideoAtView:(UIView *)view;
 - (void)newVideo:(NSString *)urlStr;
