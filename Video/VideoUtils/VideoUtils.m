@@ -46,8 +46,9 @@
     self.moviePlayer = mp;
     [mp release];
     moviePlayer.shouldAutoplay = autoPlay;
+    [moviePlayer.view setFrame:view.bounds];
     [moviePlayer prepareToPlay];
-//    [moviePlayer setScalingMode:MPMovieScalingModeFill];
+    [moviePlayer setScalingMode:MPMovieScalingModeFill];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(videoDidFinish:)
                                                  name:MPMoviePlayerPlaybackDidFinishNotification
