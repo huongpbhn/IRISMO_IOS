@@ -41,13 +41,11 @@
 }
 
 - (void)createVideoAtView:(UIView *)view shouldAutoPlay:(BOOL)autoPlay {
-    NSURL *videoURL = [NSURL URLWithString:videoURLString];
     if (moviePlayer == nil) {
         MPMoviePlayerController *mp = [[MPMoviePlayerController alloc] init];
         self.moviePlayer = mp;
         [mp release];
         
-        moviePlayer.shouldAutoplay = autoPlay;
         [moviePlayer.view setFrame:view.bounds];
         [moviePlayer setScalingMode:MPMovieScalingModeFill];
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -56,13 +54,13 @@
                                                    object:moviePlayer];
         [view addSubview:moviePlayer.view];
     }
-    moviePlayer.contentURL = videoURL;
-    [moviePlayer prepareToPlay];
+    [self newVideo:videoURLString shouldAutoPlay:autoPlay];
 
 }
 
 - (void)newVideo:(NSString *)urlStr shouldAutoPlay:(BOOL)autoPlay {
-    [moviePlayer setContentURL:[NSURL URLWithString:urlStr]];
+    [moviePlayer stop];
+    [moviePlayer setContentURL:[NSURL URLWithString:[urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     moviePlayer.shouldAutoplay = autoPlay;
     [moviePlayer prepareToPlay];
 }
