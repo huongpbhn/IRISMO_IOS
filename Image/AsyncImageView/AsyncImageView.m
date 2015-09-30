@@ -41,11 +41,11 @@
 */
 
 - (void)awakeFromNib {
-    [self startSpinner];
+//    [self startSpinner];
 }
 
 - (void)downloadImageWithURL:(NSString *)imageURL {
-//    [self startSpinner];
+    [self startSpinner];
     self.image = nil;
     [UIImage downloadImageWithURL:imageURL completionHandler:^(BOOL succeeded, UIImage *image) {
         if (succeeded) {

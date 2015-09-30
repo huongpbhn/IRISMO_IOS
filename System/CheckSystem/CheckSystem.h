@@ -16,6 +16,7 @@
 
 #define IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 #define IS_IPOD   ( [[[UIDevice currentDevice ] model] isEqualToString:@"iPod touch"] )
+#define SCREEN_WIDTH [[UIScreen mainScreen ] bounds].size.width
 #define SCREEN_HEIGHT [[UIScreen mainScreen ] bounds].size.height
 #define IS_IPHONE_4  ( IS_IPHONE && SCREEN_HEIGHT  < 568.0)
 #define IS_IPHONE_5  ( IS_IPHONE && SCREEN_HEIGHT == 568.0)

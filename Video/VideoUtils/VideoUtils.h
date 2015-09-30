@@ -26,6 +26,7 @@
 
 - (void)createVideoAtView:(UIView *)view shouldAutoPlay:(BOOL)autoPlay;
 - (void)newVideo:(NSString *)urlStr shouldAutoPlay:(BOOL)autoPlay;
+- (void)stopVideo;
 
 // present full screen
 - (void)presentVideo:(UIViewController *)viewController;

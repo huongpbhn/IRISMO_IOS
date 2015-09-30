@@ -84,4 +84,10 @@
     }
 }
 
+- (void)stopVideo {
+    if (moviePlayer != nil) {
+        [moviePlayer stop];
+    }
+}
+
 @end
