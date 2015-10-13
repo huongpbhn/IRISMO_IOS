@@ -7,6 +7,7 @@
 //
 
 #import "VideoUtils.h"
+#import "CheckSystem.h"
 
 @interface VideoUtils() {
 }
@@ -47,7 +48,9 @@
         [mp release];
         
         [moviePlayer.view setFrame:view.bounds];
-        [moviePlayer setScalingMode:MPMovieScalingModeFill];
+        if (SYSTEM_VERSION_EQUAL_TO(@"9.0")) {
+            [moviePlayer setScalingMode:MPMovieScalingModeFill];
+        }
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(videoDidFinish:)
                                                      name:MPMoviePlayerPlaybackDidFinishNotification
