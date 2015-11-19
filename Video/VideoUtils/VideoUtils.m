@@ -34,6 +34,9 @@
         [[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:MPMoviePlayerPlaybackDidFinishNotification
                                                       object:moviePlayer];
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                     name:MPMoviePlayerLoadStateDidChangeNotification
+                                                   object:moviePlayer];
     }
     
     videoURLString = nil;
@@ -55,6 +58,12 @@
                                                  selector:@selector(videoDidFinish:)
                                                      name:MPMoviePlayerPlaybackDidFinishNotification
                                                    object:moviePlayer];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(loadStateChange:)
+                                                     name:MPMoviePlayerLoadStateDidChangeNotification
+                                                   object:moviePlayer];
+        
         [view addSubview:moviePlayer.view];
     }
     [self newVideo:videoURLString shouldAutoPlay:autoPlay];
@@ -64,6 +73,7 @@
 - (void)newVideo:(NSString *)urlStr shouldAutoPlay:(BOOL)autoPlay {
     [moviePlayer stop];
     [moviePlayer setContentURL:[NSURL URLWithString:[urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    [moviePlayer setMovieSourceType:MPMovieSourceTypeFile];
     moviePlayer.shouldAutoplay = autoPlay;
     [moviePlayer prepareToPlay];
 }
@@ -79,11 +89,24 @@
     [movieViewPlayer release];
 }
 
-- (void) videoDidFinish:(NSNotification*)notification {
+- (void)videoDidFinish:(NSNotification *)notification {
 
     NSLog(@"finished playing video");
     if ([delegate respondsToSelector:@selector(videoDidFinish)]) {
         [delegate videoDidFinish];
+    }
+}
+
+- (void)loadStateChange:(NSNotification *)notification {
+    if ([delegate respondsToSelector:@selector(finishedLoadingMovie:)]) {
+        MPMoviePlayerController* playerController = notification.object;
+        MPMovieLoadState mLoadState = playerController.loadState;
+        if (mLoadState == 1) {
+            [delegate finishedLoadingMovie:NO];
+        }
+        else if (mLoadState == 3) {
+            [delegate finishedLoadingMovie:YES];
+        }
     }
 }
 

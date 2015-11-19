@@ -13,6 +13,7 @@
 
 @optional
 - (void)videoDidFinish;
+- (void)finishedLoadingMovie:(BOOL)loading;
 
 @end
 
