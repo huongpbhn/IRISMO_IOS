@@ -73,7 +73,6 @@
 - (void)newVideo:(NSString *)urlStr shouldAutoPlay:(BOOL)autoPlay {
     [moviePlayer stop];
     [moviePlayer setContentURL:[NSURL URLWithString:[urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-    [moviePlayer setMovieSourceType:MPMovieSourceTypeFile];
     moviePlayer.shouldAutoplay = autoPlay;
     [moviePlayer prepareToPlay];
 }
