@@ -115,4 +115,29 @@
     }
 }
 
+- (MPMoviePlaybackState)moviePlayerPlaybackStateDidChange {
+    
+    MPMoviePlayerController *player = moviePlayer;
+    if (player.playbackState == MPMoviePlaybackStatePlaying) { //playing
+        NSLog(@"playing: %li", (long)MPMoviePlaybackStatePlaying);
+        return MPMoviePlaybackStatePlaying;
+    }
+    else if (player.playbackState == MPMoviePlaybackStatePaused) { //paused
+        NSLog(@"paused: %li", (long)MPMoviePlaybackStatePaused);
+        return MPMoviePlaybackStatePaused;
+    }
+    else { //if (player.playbackState == MPMoviePlaybackStateStopped) { //stopped
+        NSLog(@"stop: %li", (long)MPMoviePlaybackStateStopped);
+        return MPMoviePlaybackStateStopped;
+    }
+//    }if (player.playbackState == MPMoviePlaybackStateInterrupted)
+//    { //interrupted
+//    }if (player.playbackState == MPMoviePlaybackStateSeekingForward)
+//    { //seeking forward
+//    }if (player.playbackState == MPMoviePlaybackStateSeekingBackward)
+//    { //seeking backward
+//    }
+    
+}
+
 @end
