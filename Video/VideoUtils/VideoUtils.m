@@ -71,7 +71,7 @@
 }
 
 - (void)newVideo:(NSString *)urlStr shouldAutoPlay:(BOOL)autoPlay {
-    [moviePlayer stop];
+//    [moviePlayer stop];
     [moviePlayer setContentURL:[NSURL URLWithString:[urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     moviePlayer.shouldAutoplay = autoPlay;
     [moviePlayer prepareToPlay];
