@@ -36,7 +36,7 @@
 - (void)presentVideo:(UIViewController *)viewController;
 
 // custom full screen
-- (void)createFullScreenAt:(UIView *)view;
+- (void)createFullScreenAt:(UIView *)view withRadius:(CGFloat) radius;
 - (void)returnToRegularScreenAt:(UIView *)view;
 
 @end

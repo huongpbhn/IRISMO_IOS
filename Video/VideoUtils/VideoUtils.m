@@ -134,14 +134,14 @@
     
 }
 
-- (void)createFullScreenAt:(UIView *)view {
+- (void)createFullScreenAt:(UIView *)view withRadius:(CGFloat) radius{
     if (!fullScreenView) {
         fullScreenView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
         fullScreenView.center = CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         fullScreenView.backgroundColor = [UIColor clearColor];
-        fullScreenView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, M_PI_2);
         [view addSubview:fullScreenView];
     }
+    fullScreenView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, radius);    
     if (moviePlayer.view.superview) {
         [moviePlayer.view removeFromSuperview];
     }
