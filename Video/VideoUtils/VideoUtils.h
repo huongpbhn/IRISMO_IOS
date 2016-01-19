@@ -23,7 +23,9 @@
 
 @property (nonatomic, retain) NSString *videoURLString;
 
-@property (nonatomic, assign)id delegate;
+@property (nonatomic, assign) id delegate;
+
+@property (nonatomic, retain) UIView *fullScreenView;
 
 - (void)createVideoAtView:(UIView *)view shouldAutoPlay:(BOOL)autoPlay;
 - (void)newVideo:(NSString *)urlStr shouldAutoPlay:(BOOL)autoPlay;
@@ -32,5 +34,9 @@
 
 // present full screen
 - (void)presentVideo:(UIViewController *)viewController;
+
+// custom full screen
+- (void)createFullScreenAt:(UIView *)view;
+- (void)returnToRegularScreenAt:(UIView *)view;
 
 @end
